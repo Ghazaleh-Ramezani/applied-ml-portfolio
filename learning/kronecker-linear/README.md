@@ -70,12 +70,4 @@ pip install numpy
 python benchmark.py
 ```
 
-## What I'd do next
 
-- Run the rank sweep on trained weight matrices (e.g. an MLP's layers) to show
-  real-world compressibility versus the random-matrix worst case above.
-- Add a tiny training loop so the factors are *learned* end-to-end rather than
-  fit to a pre-trained dense matrix.
-- Extend the structure into attention projections and measure quality on a
-  downstream task — the point where this stops being a study and would need
-  real validation.
