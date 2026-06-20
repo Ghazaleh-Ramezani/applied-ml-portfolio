@@ -1,9 +1,4 @@
-# Projects
 
-Built work that I can defend in depth. Each project README should follow the same
-pattern: problem, approach, stack, evaluation, what I personally did, limitations,
-next steps. The two below are your real repositories — drop your actual metrics
-into the marked spots (don't leave placeholders in the public version).
 
 ## Materials-RAG — hybrid retrieval for scientific literature
 Repo: https://github.com/Ghazaleh-Ramezani/materials-rag
@@ -36,4 +31,3 @@ tables).
 conductivity and tensile are positively correlated so the Pareto structure is
 driven by the thickness axis is a strong, specific point to make.)*
 
-**My role / limitations / next steps.** *(your words.)*
