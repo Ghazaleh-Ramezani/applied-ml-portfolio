@@ -12,10 +12,8 @@ of the fused candidates.
 
 **Evaluation.** Recall@k and MRR on a held-out query set.
 
-**Results.** *(fill in: Recall@k and MRR for BM25-only, dense-only, fused, and
-fused+reranked — the comparison is the story, and it's yours to state.)*
-
-**My role / limitations / next steps.** *(your words.)*
+**Results.** 
+**My role / limitations / next steps.** 
 
 ## Materials-MOBO — multi-objective Bayesian optimization
 **Problem.** Choosing materials-design candidates under competing objectives
@@ -24,10 +22,7 @@ fused+reranked — the comparison is the story, and it's yours to state.)*
 **Approach.** Multi-objective Bayesian optimization with BoTorch / qLogEHVI;
 Gaussian-process surrogates; Pareto-front analysis and candidate selection.
 
-**Data.** Real CNC/CNF/rGO nanocomposite dataset (samples from your Micromachines
-tables).
+**Data.** Real CNC/CNF/rGO nanocomposite dataset
 
-**Results.** *(fill in: hypervolume / Pareto-front summary; the insight that
-conductivity and tensile are positively correlated so the Pareto structure is
-driven by the thickness axis is a strong, specific point to make.)*
+**Results.** 
 
