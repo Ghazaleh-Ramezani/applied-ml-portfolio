@@ -29,28 +29,34 @@ yields the best rank-`R` Kronecker approximation.
 
 Verified correctness (the vec trick matches the explicit Kronecker product, and
 a genuinely rank-2 matrix reconstructs to machine precision, rel. error
-`≈ 3e-16`), then measured parameters, speed, and approximation quality.
+`≈ 2–3e-16`), then measured parameters, speed, and approximation quality.
 
-**Parameters and forward-pass speed (rank-1, NumPy, CPU):**
+**Parameters and forward-pass speed (rank-1, NumPy, CPU).** Parameter counts
+are exact; timings depend on the machine and its BLAS build, so the table
+shows two runs on different machines:
 
 | layer | dense params | kron params | param ratio | dense fwd | kron fwd | speedup |
 |---|---|---|---|---|---|---|
-| 1024×1024 | 1,048,576 | 2,048 | 512× | 312 µs | 7.5 µs | 41× |
-| 4096×4096 | 16,777,216 | 8,192 | 2048× | 5491 µs | 28 µs | 195× |
+| 1024×1024 | 1,048,576 | 2,048 | 512× | 312 µs / 177 µs | 7.5 µs / 5.6 µs | 41× / 32× |
+| 4096×4096 | 16,777,216 | 8,192 | 2048× | 5491 µs / 2922 µs | 28 µs / 26.9 µs | 195× / 109× |
 
-The speedup grows with size because dense cost scales as `O(M·N)` while the
-Kronecker forward scales far more slowly — the asymptotic gap is the real story.
+The speedup grows with size on both machines because dense cost scales as
+`O(M·N)` while the Kronecker forward scales as `O(m1·n1·n2 + m1·m2·n2)` — the
+asymptotic gap is the real story, and the constant factor is the machine's.
 
 **Approximation quality vs rank (1024×1024 random matrix):**
 
 | rank R | kron params | compression | rel. Frobenius error |
 |---|---|---|---|
 | 1 | 2,048 | 512× | 0.998 |
+| 2 | 4,096 | 256× | 0.996 |
 | 4 | 8,192 | 128× | 0.992 |
+| 8 | 16,384 | 64× | 0.985 |
 | 16 | 32,768 | 32× | 0.970 |
+| 32 | 65,536 | 16× | 0.942 |
 | 64 | 131,072 | 8× | 0.889 |
 
-**Honest caveat (and the most interesting result):** a *random* matrix is a
+**The most interesting result:** a *random* matrix is a
 worst case — it has no Kronecker structure, so even at rank 64 the error is
 still high. This is the right lesson to take away: Kronecker factorization only
 pays off when the underlying operator actually has this structure, which trained
@@ -69,5 +75,4 @@ trained weights is the natural next experiment.
 pip install numpy
 python benchmark.py
 ```
-
 

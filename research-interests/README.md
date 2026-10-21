@@ -1,10 +1,7 @@
 # Research Interests — Efficient and Long-Context LLM Inference
 
-Reading-driven notes and directions I am actively studying. **These are
-interests and ongoing investigation, not shipped or independently validated
-work.** Where I have written real code against one of these themes, it is linked
-explicitly and lives under [`../learning/`](../learning/) as a labeled learning
-project.
+Directions I am actively studying. Where I have written and run code against
+one of these themes, it is linked in the last section below.
 
 The unifying question across these threads: how do we make large language models
 cheaper to run, stronger at reasoning, and more capable over long contexts —
@@ -32,14 +29,18 @@ work lives in [`../projects/materials-rag`](../projects/).
 **Memory-augmented transformers.** Memory operations, the capacity/scalability
 tradeoff, and implications for long-context post-training.
 
-## Reading log
+## Where these threads meet my code
 
-A short, dated list of papers I have read against each thread, with one-line
-takeaways. *(Add entries as you go — this is what makes the section credible:
-specific papers, specific takeaways, honestly your own notes.)*
-
-| date | thread | paper | one-line takeaway |
-|---|---|---|---|
-| | structured attention | | |
-| | planner–worker | | |
-| | memory | | |
+- **Long-context behaviour:** response-only LoRA training and a strict
+  needle-in-a-haystack harness in
+  [long-context-llm-experiments](https://github.com/Ghazaleh-Ramezani/long-context-llm-experiments).
+- **Structured decisions for small models:** typed action slots that separate
+  structural from parametric choices lift Qwen3-0.6B multi-step tool use from
+  0% to 87.5% without fine-tuning, in
+  [action-isa](https://github.com/Ghazaleh-Ramezani/action-isa) (NeurIPS 2026
+  SLM-Agents workshop).
+- **Preference optimization and reward hacking:** SFT → RM → DPO/GRPO with
+  position-swapped judging and per-checkpoint Goodhart analysis, in
+  [prefopt-repro](https://github.com/Ghazaleh-Ramezani/prefopt-repro).
+- **Structured linear layers:** the Kronecker study in
+  [`../learning/kronecker-linear`](../learning/kronecker-linear/).
