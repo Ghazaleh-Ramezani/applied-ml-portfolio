@@ -18,22 +18,37 @@ database connection; six read-only tools with validated arguments; a
 deterministic or OpenAI-compatible LLM planner that only proposes; a
 verification gate that checks citations, amounts, as-of dates, the latest
 version, the role each amount plays, and the entities the question names; and
-an answer mode that renders the figures from the cited claim. FastAPI over
-PostgreSQL, CI on SQLite and PostgreSQL with a Docker Compose smoke test.
+an answer mode that renders the figures from the cited claim. A multi-agent
+variant on LangGraph splits the agent into retriever, analyst, writer and
+verifier with Pydantic hand-offs: only the retriever reads filing text, and a
+verification failure goes back to the role that can fix it. FastAPI over
+PostgreSQL with readiness probe, request ids, Prometheus metrics and alert
+rules; CI on SQLite and PostgreSQL with a Docker Compose smoke test.
 
 **Evaluation.** 30 fixed cases; a red-team suite of 30 attacks in 10 classes
 from a planner that has followed an injected instruction, with each gate check
 ablated, and false blocks measured on clean questions and on held-out honest
-answers.
+answers. The multi-agent variant against the single agent on the same cases,
+on 16 instructions planted in filings with the same worst-case
+instruction-following policy in every model role, and under injected role
+faults (30 cases × 20 seeds). A load test at concurrency 1, 4 and 16.
 
 **Results.** 29/30 evaluation cases. Attacks that succeed: 26/30 with no gate,
 1/30 with the full gate and free-text answers, 0/30 with rendered answers;
 every check stops at least one attack no other check stops. False blocks: 0/21
 clean questions, 3/10 held-out honest answers in free-text mode, 0/22 in
 rendered mode. Red-teaming found three ways past the original gate (stale
-version, role swap, wrong entity), each now closed by a check.
+version, role swap, wrong entity), each now closed by a check. Multi-agent:
+the same 29/30 with identical answers; planted instructions reach a released
+answer 0/16 times against 3/16 for the single agent with free-text answers, at
+the cost of abstentions; tools that withhold the filing text contain 16/16 in
+either architecture. Under 10% role faults, one routed retry recovers 98.7% of
+answers against 98.0% for rerunning the single agent, and no configuration
+releases a wrong answer. One worker on PostgreSQL serves 250 req/s at p50
+4.0 ms and 351 req/s at concurrency 16, with no errors, and the service's own
+counters match the request mix exactly.
 
-**Next.** The same suites with hosted models as the planner, and SEC/XBRL
+**Next.** The same suites with hosted models in the model roles, and SEC/XBRL
 ingestion.
 
 ## shift-aware-rul — reliable remaining-useful-life prediction under shift
