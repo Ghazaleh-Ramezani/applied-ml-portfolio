@@ -4,6 +4,38 @@ Each note gives the problem, the approach, how it is evaluated and what the
 committed results show. Every number links back to a file in the repository
 that produced it.
 
+## financial-claim-audit-agent — verifiable answers over restated financial figures
+
+Repo: https://github.com/Ghazaleh-Ramezani/financial-claim-audit-agent
+
+**Problem.** A financial figure is published, later restated, and asked about
+as of a date. An agent answering from filings has to cite the right version,
+respect the date, and stay correct when a document carries injected
+instructions.
+
+**Approach.** Append-only, versioned claims with provenance; a read-only
+database connection; six read-only tools with validated arguments; a
+deterministic or OpenAI-compatible LLM planner that only proposes; a
+verification gate that checks citations, amounts, as-of dates, the latest
+version, the role each amount plays, and the entities the question names; and
+an answer mode that renders the figures from the cited claim. FastAPI over
+PostgreSQL, CI on SQLite and PostgreSQL with a Docker Compose smoke test.
+
+**Evaluation.** 30 fixed cases; a red-team suite of 30 attacks in 10 classes
+from a planner that has followed an injected instruction, with each gate check
+ablated, and false blocks measured on clean questions and on held-out honest
+answers.
+
+**Results.** 29/30 evaluation cases. Attacks that succeed: 26/30 with no gate,
+1/30 with the full gate and free-text answers, 0/30 with rendered answers;
+every check stops at least one attack no other check stops. False blocks: 0/21
+clean questions, 3/10 held-out honest answers in free-text mode, 0/22 in
+rendered mode. Red-teaming found three ways past the original gate (stale
+version, role swap, wrong entity), each now closed by a check.
+
+**Next.** The same suites with hosted models as the planner, and SEC/XBRL
+ingestion.
+
 ## shift-aware-rul — reliable remaining-useful-life prediction under shift
 
 Repo: https://github.com/Ghazaleh-Ramezani/shift-aware-rul
@@ -15,17 +47,22 @@ honest when that happens.
 **Approach.** Hybrid CNN–LSTM on NASA C-MAPSS FD001, deep-ensemble and
 MC-dropout uncertainty with split-conformal calibration on held-out source
 engines only, label-free test-time adaptation (AdaBN, per-condition
-normalization) and health-anchored normalization from each engine's first 20
-cycles.
+normalization) and health-anchored normalization: per-condition statistics
+pooled over the first 20 cycles of the target engines, fitted on the unlabeled
+target fleet.
 
 **Evaluation.** Transfer to FD002–FD004, three seeds, paired engine bootstrap.
 
 **Results.** Without adaptation, 90% conformal intervals cover 28% (FD002) and
 31% (FD004) of target engines. Health-anchored normalization cuts FD002 RMSE
 from 66.4 to 22.6 and restores coverage to 0.90 (FD002) and 0.92 (FD004);
-anchored + AdaBN gives the best FD004 RMSE, 31.2.
+anchored + AdaBN has the lowest FD004 RMSE, 31.2, with intervals overlapping
+anchoring alone. The result is unchanged when the clusters come from the first
+20 cycles only, changes by about 0.2 cycles when each engine is normalized
+with other engines' statistics only, and is stable for anchors of 5–50 cycles.
 
-**Next.** Anchor-length sweep and automatic selection of the adaptation.
+**Next.** Automatic selection of the adaptation and a streaming version of
+the anchoring.
 
 ## prefopt-repro — preference optimization with trustworthy evaluation
 
